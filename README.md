@@ -1,24 +1,14 @@
 # bysykkel
 
-## Project setup
+Simple test app using Oslo Bysykkel's open API
+
+Run with
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
+and open http://localhost:8080
 
-### Compiles and minifies for production
-```
-npm run build
-```
+or
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+check the demo at https://pndapetz.im/bysykkel/
