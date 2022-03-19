@@ -115,7 +115,7 @@ export default {
     },
     fitMapToGeojsonBounds(geoJson) {
       console.log('fitMapToGeojsonBounds' ,geoJson)
-      if(!this.panned && this.mapboxMap && geoJson?.features) {
+      if(!this.panned && this.mapboxMap && geoJson?.features?.length) {
         this.panned = true
         const coordinates = geoJson.features.map(f => f.geometry.coordinates)
         const bounds = new this.mapbox.LngLatBounds(coordinates[0], coordinates[0])
