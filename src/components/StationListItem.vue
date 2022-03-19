@@ -2,7 +2,9 @@
   <div class="card container" @click="$emit('click')">
     <div class="station-title">{{station.name}}</div>
     <div class="station-info">Addresse: {{station.address}}</div>
-    <div class="station-info">Kapasitet: {{station.capacity}}</div>
+    <div class="station-info">
+      Kapasitet: {{station.capacity}}, Sykler: {{stationStatus.num_bikes_available}}, Låser: {{stationStatus.num_docks_available}}
+    </div>
   </div>
 </template>
 
@@ -10,7 +12,8 @@
 export default {
   name: "StationListItem",
   props: {
-    station: Object
+    station: Object,
+    stationStatus: Object
   },
   methods: {
 

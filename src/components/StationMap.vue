@@ -35,6 +35,7 @@ const stationSymbolLayer = {
     'icon-size': 0.16
   }
 }
+
 const stationCircleLayer = {
   type: 'circle',
   source: 'stations',
@@ -43,7 +44,6 @@ const stationCircleLayer = {
     'circle-color': '#555',
   }
 }
-
 
 export default {
   name: "StationMap",
@@ -101,7 +101,6 @@ export default {
         offset: [150, 0],
         zoom: 16
       })
-
     }
   },
   methods: {

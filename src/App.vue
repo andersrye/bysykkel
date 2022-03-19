@@ -1,9 +1,16 @@
 <template>
   <div id="app">
-    <StationMap class="bicycle-map" :station-info="stationInfo" :station-status="stationStatus" :selected-station="selectedStation"/>
+    <StationMap class="bicycle-map"
+                :station-info="stationInfo"
+                :station-status="stationStatus"
+                :selected-station="selectedStation"/>
     <div class="bicycle-list-container card">
-      <span class="last-updated">Sist oppdatert {{lastUpdated}}</span>
-      <StationList :station-info="stationInfo" class="bicycle-list" @item-click="(id) => this.selectedStation = id"/>
+      <h1 class="list-title">{{ title }}</h1>
+      <span class="last-updated">Sist oppdatert {{ lastUpdated }}</span>
+      <StationList :station-info="stationInfo"
+                   :station-status="stationStatus"
+                   class="bicycle-list"
+                   @item-click="(id) => this.selectedStation = id"/>
     </div>
   </div>
 </template>
@@ -37,9 +44,12 @@ export default {
     this.handleStationInfo().catch(console.error)
   },
   computed: {
+    title() {
+      return this.systemInfo?.data?.name
+    },
     lastUpdated() {
       const timestamp = this.stationInfo?.last_updated
-      if(timestamp) {
+      if (timestamp) {
         return new Date(timestamp * 1000).toLocaleString()
       } else {
         return ""
@@ -51,7 +61,7 @@ export default {
       console.log('station', station)
     },
     async handleStationInfo() {
-      while(this.live) {
+      while (this.live) {
         try {
           for await (const status of this.gbfs.streamStationStatus()) {
             this.stationStatus = status
@@ -70,16 +80,15 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-  overflow-y: hidden;
 }
+
 .bicycle-map {
-  //text-align: left;
   position: absolute;
   overflow: hidden;
   height: 100vh;
   width: 100vw;
 }
+
 .bicycle-list-container {
   display: flex;
   flex-direction: column;
@@ -88,13 +97,21 @@ export default {
   margin: 8px 0 0 8px;
   background: #f5f5f5;
 }
+
 .bicycle-list {
   height: 100%;
   width: 300px;
   overflow: auto;
   margin: 5px
 }
+
 .last-updated {
   padding: 8px;
+}
+
+.list-title {
+  padding: 8px;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 </style>
