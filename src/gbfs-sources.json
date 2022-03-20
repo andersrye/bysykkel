@@ -1,8 +1,5 @@
 {
   "oslo": "https://gbfs.urbansharing.com/oslobysykkel.no/gbfs.json",
   "trondheim": "https://gbfs.urbansharing.com/trondheimbysykkel.no/gbfs.json",
-  "bergen": "https://gbfs.urbansharing.com/bergenbysykkel.no/gbfs.json",
-  "madison": "https://gbfs.bcycle.com/bcycle_madison/gbfs.json",
-  "paris-lime": "https://data.lime.bike/api/partners/v2/gbfs/paris/gbfs.json",
-  "pittsburgh": "https://gbfs.nextbike.net/maps/gbfs/v1/nextbike_pp/en/system_information.jsondocker "
+  "bergen": "https://gbfs.urbansharing.com/bergenbysykkel.no/gbfs.json"
 }

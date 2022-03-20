@@ -16,34 +16,13 @@
         :layer="stationSymbolLayer"/>
   </MglMap>
 </template>
+
 <script>
 import Mapbox from "mapbox-gl";
 import {MglMap, MglNavigationControl, MglGeojsonLayer} from "vue-mapbox"
 import icon from '@/assets/symbol-background.png'
-
-const stationSymbolLayer = {
-  type: 'symbol',
-  source: 'stations',
-  paint: {
-    'text-color': 'white'
-  },
-  layout: {
-    'text-field': ['get', 'label'],
-    'text-font': ['Roboto Mono Regular'],
-    'text-size': 14,
-    'icon-image': 'symbol-background',
-    'icon-size': 0.16
-  }
-}
-
-const stationCircleLayer = {
-  type: 'circle',
-  source: 'stations',
-  paint: {
-    'circle-radius': 4,
-    'circle-color': '#555',
-  }
-}
+import stationSymbolLayer from '@/map-layers/station-symbol-layer.json'
+import stationCircleLayer from '@/map-layers/station-circle-layer.json'
 
 export default {
   name: "StationMap",
@@ -91,11 +70,11 @@ export default {
   },
   watch: {
     geoJson(geoJson) {
-      this.fitMapToGeojsonBounds(geoJson)
+      this.fitMapToGeoJsonBounds(geoJson)
     },
     selectedStation(id) {
       const station = this.stationInfo?.data?.stations?.find(station => station.station_id === id)
-      if(!station) return
+      if (!station) return
       this.mapboxMap.easeTo({
         center: [station.lon, station.lat],
         offset: [150, 0],
@@ -107,14 +86,13 @@ export default {
     onMapLoaded({ map }) {
       this.mapboxMap = map
       map.loadImage(icon, (error, image) => {
-        if(error) throw error
+        if (error) throw error
         map.addImage('symbol-background', image)
       })
-      this.fitMapToGeojsonBounds(this.geoJson)
+      this.fitMapToGeoJsonBounds(this.geoJson)
     },
-    fitMapToGeojsonBounds(geoJson) {
-      console.log('fitMapToGeojsonBounds' ,geoJson)
-      if(!this.panned && this.mapboxMap && geoJson?.features?.length) {
+    fitMapToGeoJsonBounds(geoJson) {
+      if (!this.panned && this.mapboxMap && geoJson?.features?.length) {
         this.panned = true
         const coordinates = geoJson.features.map(f => f.geometry.coordinates)
         const bounds = new this.mapbox.LngLatBounds(coordinates[0], coordinates[0])
@@ -122,35 +100,30 @@ export default {
           bounds.extend(coordinate)
         }
         this.mapboxMap?.fitBounds(bounds, {
-          padding: {top: 50, bottom:50, left: 350, right: 50},
+          padding: { top: 50, bottom: 50, left: 350, right: 50 },
           duration: 1500,
         })
       }
     },
     stationToFeature(info, status = {}) {
+      const { num_bikes_available: bikesAvailable, num_docks_available: docksAvailable } = status
+      const { name, address, capacity, lon, lat } = info
       return {
         type: 'Feature',
         properties: {
-          name: info.name,
-          address: info.address,
-          capacity: info.capacity,
-          bikesAvailable: status.num_bikes_available,
-          docksAvailable: status.num_docks_available,
-          label: `${status.num_bikes_available?.toString()?.padStart(2, '\u00A0')} ${status.num_docks_available?.toString()?.padStart(2, '\u00A0')}`
+          name,
+          address,
+          capacity,
+          bikesAvailable,
+          docksAvailable,
+          label: `${bikesAvailable?.toString()?.padStart(2, '\u00A0')} ${docksAvailable?.toString()?.padStart(2, '\u00A0')}`
         },
         geometry: {
           type: 'Point',
-          coordinates: [
-            info.lon,
-            info.lat
-          ]
+          coordinates: [lon, lat]
         }
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

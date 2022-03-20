@@ -32,6 +32,6 @@ export default {
 }
 .station-info {
   font-size: 12px;
-  color: #666;
+  color: #6f6f6f;
 }
 </style>

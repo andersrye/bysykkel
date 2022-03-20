@@ -18,7 +18,7 @@
 <script>
 import StationList from './components/StationList.vue'
 import StationMap from "./components/StationMap.vue";
-import Gbfs from './gbfs-generators'
+import Gbfs from './gbfs'
 import sources from './gbfs-sources.json'
 
 export default {
