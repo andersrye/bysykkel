@@ -16,7 +16,8 @@ export default {
   components: { StationListItem },
   props: {
     stationInfo: Object,
-    stationStatus: Object
+    stationStatus: Object,
+    filterText: String
   },
   computed: {
     stationStatusById() {
@@ -27,7 +28,13 @@ export default {
     },
     stationList() {
       const stations = this.stationInfo?.data?.stations ?? []
-      return [...stations]?.sort((a, b) => a.name.localeCompare(b.name))
+      return [...stations]
+          .filter(station => {
+            return !this.filterText
+            || station.name?.toLowerCase()?.includes(this.filterText.toLowerCase())
+            || station.address?.toLowerCase()?.includes(this.filterText.toLowerCase())
+          })
+          .sort((a, b) => a.name.localeCompare(b.name))
     },
   },
 }

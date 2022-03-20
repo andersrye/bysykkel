@@ -7,8 +7,10 @@
     <div class="bicycle-list-container card">
       <h1 class="list-title">{{ title }}</h1>
       <span class="last-updated">Sist oppdatert {{ lastUpdated }}</span>
+      <input class="input is-normal search-field" type="text" placeholder="Søk" v-model="filterText">
       <StationList :station-info="stationInfo"
                    :station-status="stationStatus"
+                   :filter-text="filterText"
                    class="bicycle-list"
                    @item-click="(id) => this.selectedStation = id"/>
     </div>
@@ -32,7 +34,8 @@ export default {
       systemInfo: null,
       stationInfo: null,
       stationStatus: null,
-      selectedStation: null
+      selectedStation: null,
+      filterText: ""
     }
   },
   async created() {
@@ -96,22 +99,24 @@ export default {
   position: absolute;
   margin: 8px 0 0 8px;
   background: #f5f5f5;
+  padding: 8px
 }
 
 .bicycle-list {
   height: 100%;
   width: 300px;
   overflow: auto;
-  margin: 5px
 }
 
 .last-updated {
-  padding: 8px;
+  margin-bottom: 8px;
 }
 
 .list-title {
-  padding: 8px;
   font-size: 1.25rem;
   font-weight: bold;
+}
+.search-field {
+  margin-bottom: 8px;
 }
 </style>
