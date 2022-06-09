@@ -1,8 +1,9 @@
 {
+  "id": "stations",
   "type": "circle",
   "source": "stations",
   "paint": {
-    "circle-radius": 4,
+    "circle-radius": 3,
     "circle-color": "#555"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "id": "available-docks",
+  "type": "symbol",
+  "source": "stations",
+  "paint": {
+    "text-color": "black",
+    "icon-color": "#bbbbbb",
+    "icon-halo-color": "#bbbbbb",
+    "icon-halo-blur": 2,
+    "icon-halo-width": 2
+  },
+  "layout": {
+    "text-field": ["get", "docksAvailable"],
+    "text-size": 12,
+    "text-font": ["Open Sans SemiBold"],
+    "icon-image": "circle-icon",
+    "icon-size": 1
+  }
+}

@@ -1,9 +1,12 @@
 import './assets/app.scss'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 
-Vue.config.productionTip = false
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBicycle, faSearch, faLockOpen, faXmark} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+library.add(faBicycle, faSearch, faLockOpen, faXmark)
+createApp(App)
+    .component("FontAwesomeIcon", FontAwesomeIcon)
+    .mount('#app')

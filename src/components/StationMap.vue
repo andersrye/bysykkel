@@ -1,129 +1,77 @@
 <template>
-  <MglMap
-      :accessToken="accessToken"
-      :mapStyle="mapStyle"
-      @load="onMapLoaded">
-    <MglNavigationControl position="top-right"/>
-    <MglGeojsonLayer
-        sourceId="stations"
-        :source="source"
-        layerId="station-circle-layer"
-        :layer="stationCircleLayer"/>
-    <MglGeojsonLayer
-        sourceId="stations"
-        :source="source"
-        layerId="station-symbol-layer"
-        :layer="stationSymbolLayer"/>
-  </MglMap>
+  <div ref="mapContainer" />
 </template>
 
-<script>
-import Mapbox from "mapbox-gl";
-import {MglMap, MglNavigationControl, MglGeojsonLayer} from "vue-mapbox"
-import icon from '@/assets/symbol-background.png'
-import stationSymbolLayer from '@/map-layers/station-symbol-layer.json'
-import stationCircleLayer from '@/map-layers/station-circle-layer.json'
+<script setup>
+import {computed, reactive, watch, ref, watchEffect} from "vue"
+import mapboxgl from "mapbox-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
+import {useMapbox} from "@/composables/mapbox"
+import { stationAsFeatureCollection } from '@/utils/geojson'
+import circleIcon from '@/assets/circle_24.png'
+import availableBikesLayer from '@/map-layers/available-bikes.json'
+import availableDocksLayer from '@/map-layers/available-docks.json'
+import stationLayer from '@/map-layers/stations.json'
 
-export default {
-  name: "StationMap",
-  components: {
-    MglMap,
-    MglNavigationControl,
-    MglGeojsonLayer
-  },
-  props: {
-    stationInfo: Object,
-    stationStatus: Object,
-    selectedStation: String
-  },
-  data() {
-    return {
-      accessToken: 'pk.eyJ1IjoiYW5kZXJzcnllIiwiYSI6ImNsMHI1emE5aDAwNGMzaW5tOHZrdmt0azcifQ.VCTJiGvc-mef33wXhlqk7g',
-      mapStyle: 'mapbox://styles/mapbox/streets-v11'
-    }
-  },
-  computed: {
-    geoJson() {
-      const statusById = this.stationStatus?.data?.stations?.reduce((acc, status) => {
-        acc[status.station_id] = status
-        return acc
-      }, {}) ?? {}
-      return {
-        type: 'FeatureCollection',
-        features: this.stationInfo?.data?.stations?.map(info => {
-          return this.stationToFeature(info, statusById[info.station_id])
-        }) ?? []
-      }
-    },
-    source() {
-      return {
-        type: 'geojson',
-        data: this.geoJson
-      }
-    }
-  },
-  created() {
-    this.mapbox = Mapbox
-    this.panned = false
-    this.stationSymbolLayer = stationSymbolLayer
-    this.stationCircleLayer = stationCircleLayer
-  },
-  watch: {
-    geoJson(geoJson) {
-      this.fitMapToGeoJsonBounds(geoJson)
-    },
-    selectedStation(id) {
-      const station = this.stationInfo?.data?.stations?.find(station => station.station_id === id)
-      if (!station) return
-      this.mapboxMap.easeTo({
-        center: [station.lon, station.lat],
-        offset: [150, 0],
-        zoom: 16
-      })
-    }
-  },
-  methods: {
-    onMapLoaded({ map }) {
-      this.mapboxMap = map
-      map.loadImage(icon, (error, image) => {
-        if (error) throw error
-        map.addImage('symbol-background', image)
-      })
-      this.fitMapToGeoJsonBounds(this.geoJson)
-    },
-    fitMapToGeoJsonBounds(geoJson) {
-      if (!this.panned && this.mapboxMap && geoJson?.features?.length) {
-        this.panned = true
-        const coordinates = geoJson.features.map(f => f.geometry.coordinates)
-        const bounds = new this.mapbox.LngLatBounds(coordinates[0], coordinates[0])
-        for (const coordinate of coordinates) {
-          bounds.extend(coordinate)
-        }
-        this.mapboxMap?.fitBounds(bounds, {
-          padding: { top: 50, bottom: 50, left: 350, right: 50 },
-          duration: 1500,
-        })
-      }
-    },
-    stationToFeature(info, status = {}) {
-      const { num_bikes_available: bikesAvailable, num_docks_available: docksAvailable } = status
-      const { name, address, capacity, lon, lat } = info
-      return {
-        type: 'Feature',
-        properties: {
-          name,
-          address,
-          capacity,
-          bikesAvailable,
-          docksAvailable,
-          label: `${bikesAvailable?.toString()?.padStart(2, '\u00A0')} ${docksAvailable?.toString()?.padStart(2, '\u00A0')}`
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: [lon, lat]
-        }
-      }
-    }
-  }
+const mapContainer = ref(null)
+const reactiveAvailableBikesLayer = reactive(availableBikesLayer)
+const reactiveAvailableDocksLayer = reactive(availableDocksLayer)
+const geoJson = computed(() => stationAsFeatureCollection(props.stationInfo, props.stationStatus))
+
+const props = defineProps({
+  stationInfo: { type: Object, default: () => ({}) },
+  stationStatus: { type: Object, default: () => ({}) },
+  selectedStation: { type: Object, default: null },
+  showBikes: {type: Boolean, default: true}
+})
+
+const map = useMapbox({
+  container: mapContainer,
+  accessToken: 'pk.eyJ1IjoiYW5kZXJzcnllIiwiYSI6ImNsMHI1emE5aDAwNGMzaW5tOHZrdmt0azcifQ.VCTJiGvc-mef33wXhlqk7g',
+  style: "mapbox://styles/mapbox/streets-v11",
+  zoom: 5,
+  center: [10.735834, 60.917947]
+})
+
+
+map.addImage('circle-icon', circleIcon, {sdf: true})
+
+map.addGeoJsonSource('stations', geoJson)
+
+map.addLayer(stationLayer)
+map.addLayer(reactiveAvailableBikesLayer)
+map.addLayer(reactiveAvailableDocksLayer)
+
+function toggleLayers(showBikes) {
+  console.log('toggleLayers', showBikes)
+  reactiveAvailableBikesLayer.layout.visibility = showBikes ? 'visible' : 'none'
+  reactiveAvailableDocksLayer.layout.visibility = showBikes ? 'none' : 'visible'
 }
+
+watchEffect(() => toggleLayers(props.showBikes))
+
+watch(() => props.selectedStation, id => {
+  const station = props.stationInfo?.data?.stations?.find(station => station.station_id === id)
+  if (!station) return
+  map.mapboxMap.value?.easeTo({
+    center: [station.lon, station.lat],
+    zoom: 16
+  })
+})
+
+//fit map to geoJson once, then remove watch
+const unwatch = watchEffect(() => {
+  if (map.mapboxMap.value && geoJson.value?.features?.length) {
+    const coordinates = geoJson.value.features.map(f => f.geometry.coordinates)
+    const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
+    for (const coordinate of coordinates) {
+      bounds.extend(coordinate)
+    }
+    map.mapboxMap.value?.fitBounds(bounds, {
+      padding: { top: 50, bottom: 50, left: 50, right: 50 },
+      duration: 1000,
+    })
+    unwatch()
+  }
+})
 </script>
