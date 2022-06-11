@@ -3,11 +3,11 @@
 </template>
 
 <script setup>
-import {computed, reactive, watch, ref, watchEffect} from "vue"
+import { computed, reactive, watch, ref, watchEffect } from "vue"
 import mapboxgl from "mapbox-gl"
 import StationPopupContent from '@/components/StationPopupContent'
 import "mapbox-gl/dist/mapbox-gl.css"
-import {useMapbox} from "@/composables/mapbox"
+import { useMapbox } from "@/composables/mapbox"
 import { stationsAsFeatureCollection } from '@/utils/geojson'
 import circleIcon from '@/assets/circle_24.png'
 import availableBikesLayer from '@/map-layers/available-bikes.json'
@@ -33,7 +33,6 @@ const map = useMapbox({
   center: [10.735834, 60.917947]
 })
 
-
 map.addImage('circle-icon', circleIcon, {sdf: true})
 
 map.addGeoJsonSource('stations', geoJson)
@@ -42,10 +41,29 @@ map.addLayer(stationLayer)
 map.addLayer(reactiveAvailableBikesLayer)
 map.addLayer(reactiveAvailableDocksLayer)
 
+map.on('mouseenter', [availableBikesLayer.id, availableDocksLayer.id], () => {
+  map.mapboxMap.value.getCanvas().style.cursor = 'pointer';
+})
+
+map.on('mouseleave', [availableBikesLayer.id, availableDocksLayer.id], () => {
+  map.mapboxMap.value.getCanvas().style.cursor = '';
+})
+
+map.on('click', [availableBikesLayer.id, availableDocksLayer.id], (e) => {
+  const feature = e.features[0]
+  if(feature) {
+    openPopup(feature.properties, e.lngLat)
+  }
+})
+
 function toggleLayers(showBikes) {
   console.log('toggleLayers', showBikes)
   reactiveAvailableBikesLayer.layout.visibility = showBikes ? 'visible' : 'none'
   reactiveAvailableDocksLayer.layout.visibility = showBikes ? 'none' : 'visible'
+}
+
+function openPopup(station, lngLat) {
+  map.openPopup(StationPopupContent, lngLat, {station})
 }
 
 watchEffect(() => toggleLayers(props.showBikes))
@@ -74,25 +92,6 @@ const unwatch = watchEffect(() => {
       duration: 1000,
     })
     unwatch()
-  }
-})
-
-function openPopup(station, lngLat) {
-  map.openPopup(StationPopupContent, lngLat, {station})
-}
-
-map.on('mouseenter', [availableBikesLayer.id, availableDocksLayer.id], () => {
-  map.mapboxMap.value.getCanvas().style.cursor = 'pointer';
-})
-
-map.on('mouseleave', [availableBikesLayer.id, availableDocksLayer.id], () => {
-  map.mapboxMap.value.getCanvas().style.cursor = '';
-})
-
-map.on('click', [availableBikesLayer.id, availableDocksLayer.id], (e) => {
-  const feature = e.features[0]
-  if(feature) {
-    openPopup(feature.properties, e.lngLat)
   }
 })
 
