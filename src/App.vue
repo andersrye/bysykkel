@@ -2,8 +2,7 @@
   <div id="app">
     <StationMap
       class="bicycle-map"
-      :station-info="stationInfo"
-      :station-status="stationStatus"
+      :stations="combinedStationInfo"
       :selected-station="selectedStation"
       :show-bikes="showBikes"
     />
@@ -30,9 +29,9 @@
 
     <transition name="fade">
       <button
-          class="lower-right-button button is-link"
-          v-if="!showSearch"
-          @click="showSearch = true"
+        class="lower-right-button button is-link"
+        v-if="!showSearch"
+        @click="showSearch = true"
       >
         <span class="icon">
           <FontAwesomeIcon icon="search" />
@@ -44,8 +43,7 @@
       <StationSearch
         v-if="showSearch"
         class="station-search"
-        :station-status="stationStatus"
-        :station-info="stationInfo"
+        :stations="combinedStationInfo"
         @close="showSearch = false"
         @selected-station="stationSelected"
       />
@@ -54,22 +52,33 @@
 </template>
 
 <script setup>
-import {shallowRef, ref} from "vue"
+import {ref, computed, triggerRef} from "vue"
 import StationMap from "./components/StationMap"
 import StationSearch from "./components/StationSearch"
 import Gbfs from './gbfs'
 import sources from './gbfs-sources.json'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-const systemInfo = shallowRef(null)
-const stationInfo = shallowRef(null)
-const stationStatus = shallowRef(null)
+const systemInfo = ref(null)
+const stationInfo = ref(null)
+const stationStatus = ref(null)
 const selectedStation = ref(null)
 const showBikes = ref(true)
 const showSearch = ref(false)
 
-function handleError(error) {
-  console.error(error)
-}
+const combinedStationInfo = computed(() => {
+  //merge the station info and status to make it easier to use
+  const statusById = stationStatus.value?.data?.stations?.reduce((acc, status) => {
+    acc[status.station_id] = status
+    return acc
+  }, {}) ?? {}
+  return stationInfo.value?.data?.stations.map(info => ({...info, ...statusById[info.station_id]}))
+})
+
+setInterval(() =>  {
+  stationStatus.value.data.stations[0].num_bikes_available++
+  triggerRef(stationStatus)
+}, 2000)
 
 const source = new URLSearchParams(window.location.search).get('source') ?? 'oslo'
 const gbfs = new Gbfs(sources[source])
@@ -89,18 +98,18 @@ async function pollStationStatus() {
   }
 }
 
-function stationSelected(id) {
+function stationSelected(station) {
   showSearch.value = false
-  selectedStation.value = id
+  selectedStation.value = station
+}
+
+function handleError(error) {
+  console.error(error)
+  //todo: this is a terrible way to handle errors. display a message and automatically retry instead
 }
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
 .bicycle-map {
   position: absolute;

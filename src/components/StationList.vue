@@ -1,37 +1,31 @@
 <template>
   <div>
-    <StationListItem
+    <div
       v-for="station in stationList"
-      :station="station"
-      :station-status="stationStatusById[station.station_id]"
       :key="station.station_id"
-      @click="$emit('item-click', station.station_id)"
-    />
+      class="card item-container"
+      @click="$emit('station-click', station)"
+    >
+      <StationInfo
+        :station="station"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
 import {computed} from "vue";
-import StationListItem from "@/components/StationListItem";
+import StationInfo from "@/components/StationInfo";
 
 const props = defineProps({
-  stationInfo: { type: Object, default: () => ({}) },
-  stationStatus: { type: Object, default: () => ({}) },
-  filterText: { type: String, default: "" }
+  stations: {type: Array, default: () => ([])},
+  filterText: {type: String, default: ""}
 })
 
-defineEmits(['item-click'])
-
-const stationStatusById = computed(() => {
-  return props.stationStatus?.data?.stations?.reduce((acc, status) => {
-    acc[status.station_id] = status
-    return acc
-  }, {}) ?? {}
-})
+defineEmits(['station-click'])
 
 const stationList = computed(() => {
-  const stations = props.stationInfo?.data?.stations ?? []
-  return stations
+  return props.stations
       .filter(station => {
         return !props.filterText
             || station.name?.toLowerCase()?.includes(props.filterText.toLowerCase())
@@ -40,3 +34,16 @@ const stationList = computed(() => {
       .sort((a, b) => a.name.localeCompare(b.name))
 })
 </script>
+<style scoped>
+
+.item-container {
+  margin: 0 3px 6px 3px;
+  padding: 8px;
+}
+
+.item-container:hover {
+  background: #dfe8fd;
+  cursor: pointer;
+}
+
+</style>

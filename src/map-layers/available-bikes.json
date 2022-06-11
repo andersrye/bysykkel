@@ -10,7 +10,7 @@
     "icon-halo-width": 2
   },
   "layout": {
-    "text-field": ["get", "bikesAvailable"],
+    "text-field": ["get", "num_bikes_available"],
     "text-size": 12,
     "text-font": ["Open Sans SemiBold"],
     "icon-image": "circle-icon",

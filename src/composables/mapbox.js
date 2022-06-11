@@ -1,4 +1,4 @@
-import {onMounted, onUnmounted, unref, watchEffect, shallowRef, ref} from 'vue'
+import {onMounted, onUnmounted, unref, watchEffect, shallowRef, ref, createApp, nextTick, watch} from 'vue'
 import mapboxgl from "mapbox-gl";
 
 /**
@@ -7,7 +7,7 @@ import mapboxgl from "mapbox-gl";
  * @param {string|HTMLElement|ref} mapboxOptions.container - The html element or element ID in which to render the map
  * @param {string} mapboxOptions.accessToken - The mapbox  access token to use.
  * @param {string|object} mapboxOptions.style - The style spec to use, or an url to the style spec
- * @returns {{addGeoJsonSource: Function, addLayer: Function, mapboxMap: shallowRef, addImage: Function}}
+ * @returns {{addGeoJsonSource: Function, addLayer: Function, mapboxMap: shallowRef, addImage: Function, openPopup: Function, on: Function, off: Function}}
  */
 export function useMapbox(mapboxOptions) {
     const map = shallowRef(null)
@@ -88,7 +88,7 @@ export function useMapbox(mapboxOptions) {
             if (map.value) {
                 const image = await new Promise(((resolve, reject) => {
                     map.value.loadImage(unrefedImageUrl, (error, image) => {
-                        if(error) reject(error)
+                        if (error) reject(error)
                         resolve(image)
                     })
                 }))
@@ -102,10 +102,50 @@ export function useMapbox(mapboxOptions) {
         stopHandles.push(stop)
     }
 
+
+    const popup = new mapboxgl.Popup({offset: 14})
+
+    function openPopup(component, lngLat, injects = {}) {
+        const popupContent = createApp(component)
+        for (const [key, value] of Object.entries(injects)) {
+            popupContent.provide(key, value)
+        }
+        popup.remove()
+        popup.setHTML('<div id="popup-content"/>')
+            .setLngLat(lngLat)
+            .on('close', () => {
+                popupContent.unmount()
+            })
+            .addTo(map.value)
+
+        nextTick(() => {
+            popupContent.mount('#popup-content')
+        })
+    }
+
+    function runOnceWhenMapReady(fn) {
+        const unwatch = watch(map, map =>  {
+            if(map) {
+                fn(map)
+                unwatch()
+            }
+        })
+    }
+
+    function on(type, layerId, listener) {
+        runOnceWhenMapReady(map => map.on(type, layerId, listener))
+    }
+    function off(type, layerId, listener) {
+        runOnceWhenMapReady(map => map.off(type, layerId, listener))
+    }
+
     return {
         mapboxMap: map,
         addGeoJsonSource,
         addLayer,
-        addImage
+        addImage,
+        openPopup,
+        on,
+        off
     }
 }

@@ -8,7 +8,7 @@
           ref="searchInput"
           placeholder="Søk"
           :value="filterText"
-          @input="e => filterText.value = e.target.value"
+          @input="e => filterText = e.target.value"
         >
       </p>
       <p class="control">
@@ -25,10 +25,9 @@
 
     <StationList
       class="station-list"
-      :station-info="stationInfo"
-      :station-status="stationStatus"
+      :stations="stations"
       :filter-text="filterText"
-      @item-click="(id) => $emit('selected-station', id)"
+      @station-click="station => $emit('selected-station', station )"
     />
   </div>
 </template>
@@ -36,13 +35,13 @@
 <script setup>
 import StationList from './StationList.vue'
 import {onMounted, ref} from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const filterText = ref("")
 const searchInput = ref(null)
 
 defineProps({
-  stationInfo: { type: Object, default: () => ({}) },
-  stationStatus: { type: Object, default: () => ({}) }
+  stations: { type: Array, default: () => ([]) }
 })
 
 defineEmits(['selected-station', 'close'])

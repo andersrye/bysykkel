@@ -1,31 +1,23 @@
-export function stationAsFeature(info, status = {}) {
-    const { num_bikes_available: bikesAvailable, num_docks_available: docksAvailable } = status
-    const { name, address, capacity, lon, lat } = info
+export function stationAsFeature(station) {
     return {
         type: 'Feature',
         properties: {
-            name,
-            address,
-            capacity,
-            bikesAvailable,
-            docksAvailable
+            name: station.name,
+            address: station.address,
+            capacity: station.capacity,
+            num_bikes_available: station.num_bikes_available,
+            num_docks_available: station.num_docks_available
         },
         geometry: {
             type: 'Point',
-            coordinates: [lon, lat]
+            coordinates: [station.lon, station.lat]
         }
     }
 }
 
-export function stationAsFeatureCollection(stationInfo, stationStatus) {
-    const statusById = stationStatus?.data?.stations?.reduce((acc, status) => {
-        acc[status.station_id] = status
-        return acc
-    }, {}) ?? {}
+export function stationsAsFeatureCollection(stations) {
     return {
         type: 'FeatureCollection',
-        features: stationInfo?.data?.stations?.map(info => {
-            return stationAsFeature(info, statusById[info.station_id])
-        }) ?? []
+        features: stations?.map(info => stationAsFeature(info)) ?? []
     }
 }
