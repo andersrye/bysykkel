@@ -49,27 +49,31 @@
       />
     </transition>
   </div>
-  <span
+  <div
     class="tag is-warning status"
     v-if="status === 'loading'"
   >
-    <span class="icon"><FontAwesomeIcon
-      icon="spinner"
-      class="fa-spin"
-    /></span>
+    <span class="icon">
+      <FontAwesomeIcon
+        icon="spinner"
+        class="fa-spin"
+      />
+    </span>
     <span>Loading</span>
-  </span>
-  <span
+  </div>
+  <div
     class="tag is-danger status"
     v-if="status === 'error'"
   >
-    <span class="icon"><FontAwesomeIcon icon="spinner"/></span>
-    <span>Loading</span>
-  </span>
-  <span
+    <span class="icon"><FontAwesomeIcon icon="circle-xmark" /></span>
+    <span>Error</span>
+  </div>
+  <div
     class="tag is-success status"
     v-if="status === 'ok'"
-  ><span class="icon"><FontAwesomeIcon icon="circle-check"/></span></span>
+  >
+    <span class="icon"><FontAwesomeIcon icon="circle-check" /></span>
+  </div>
 </template>
 
 <script setup>

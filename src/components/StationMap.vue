@@ -57,7 +57,6 @@ map.on('click', [availableBikesLayer.id, availableDocksLayer.id], (e) => {
 })
 
 function toggleLayers(showBikes) {
-  console.log('toggleLayers', showBikes)
   reactiveAvailableBikesLayer.layout.visibility = showBikes ? 'visible' : 'none'
   reactiveAvailableDocksLayer.layout.visibility = showBikes ? 'none' : 'visible'
 }
