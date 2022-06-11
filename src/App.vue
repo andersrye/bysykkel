@@ -2,7 +2,7 @@
   <div id="app">
     <StationMap
       class="bicycle-map"
-      :stations="combinedStationInfo"
+      :stations="stations"
       :selected-station="selectedStation"
       :show-bikes="showBikes"
     />
@@ -43,21 +43,42 @@
       <StationSearch
         v-if="showSearch"
         class="station-search"
-        :stations="combinedStationInfo"
+        :stations="stations"
         @close="showSearch = false"
         @selected-station="stationSelected"
       />
     </transition>
   </div>
+  <span
+    class="tag is-warning status"
+    v-if="status === 'loading'"
+  >
+    <span class="icon"><FontAwesomeIcon
+      icon="spinner"
+      class="fa-spin"
+    /></span>
+    <span>Loading</span>
+  </span>
+  <span
+    class="tag is-danger status"
+    v-if="status === 'error'"
+  >
+    <span class="icon"><FontAwesomeIcon icon="spinner"/></span>
+    <span>Loading</span>
+  </span>
+  <span
+    class="tag is-success status"
+    v-if="status === 'ok'"
+  ><span class="icon"><FontAwesomeIcon icon="circle-check"/></span></span>
 </template>
 
 <script setup>
-import {ref, computed, triggerRef} from "vue"
+import {ref, computed, watchEffect} from "vue"
 import StationMap from "./components/StationMap"
 import StationSearch from "./components/StationSearch"
 import Gbfs from './gbfs'
 import sources from './gbfs-sources.json'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 const systemInfo = ref(null)
 const stationInfo = ref(null)
@@ -65,20 +86,16 @@ const stationStatus = ref(null)
 const selectedStation = ref(null)
 const showBikes = ref(true)
 const showSearch = ref(false)
+const status = ref("loading")
 
-const combinedStationInfo = computed(() => {
-  //merge the station info and status to make it easier to use
+const stations = computed(() => {
+  //merge the station info and status to make it easier to handle
   const statusById = stationStatus.value?.data?.stations?.reduce((acc, status) => {
     acc[status.station_id] = status
     return acc
   }, {}) ?? {}
   return stationInfo.value?.data?.stations.map(info => ({...info, ...statusById[info.station_id]}))
 })
-
-setInterval(() =>  {
-  stationStatus.value.data.stations[0].num_bikes_available++
-  triggerRef(stationStatus)
-}, 2000)
 
 const source = new URLSearchParams(window.location.search).get('source') ?? 'oslo'
 const gbfs = new Gbfs(sources[source])
@@ -91,6 +108,12 @@ gbfs.getStationInfo()
     .catch(handleError)
 pollStationStatus()
     .catch(handleError)
+
+watchEffect(() => {
+  if(systemInfo.value && stationInfo.value && stationStatus.value) {
+    status.value = 'ok'
+  }
+})
 
 async function pollStationStatus() {
   for await (const status of gbfs.streamStationStatus()) {
@@ -105,7 +128,8 @@ function stationSelected(station) {
 
 function handleError(error) {
   console.error(error)
-  //todo: this is a terrible way to handle errors. display a message and automatically retry instead
+  //todo: this is not a great way to handle errors. automatically retry and update status
+  status.value = 'error'
 }
 </script>
 
@@ -138,12 +162,21 @@ function handleError(error) {
   bottom: 0;
   margin: 8px 8px 36px 8px;
 }
+
 .lower-right-button {
   position: absolute;
   right: 0;
   bottom: 0;
   margin: 8px 8px 36px 8px;
 }
+
+.status {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 8px
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
