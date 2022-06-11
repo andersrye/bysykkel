@@ -4,11 +4,11 @@ import mapboxgl from "mapbox-gl";
 /**
  * Helper composable to make working with mapbox maps easier.
  *
- * @param {object} mapboxOptions - See https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters for all available options
+ * @param {object} mapboxOptions - See {@link https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters} for all available options
  * @param {string|HTMLElement|ref} mapboxOptions.container - The html element or element ID in which to render the map
  * @param {string} mapboxOptions.accessToken - The mapbox  access token to use.
  * @param {string|object} mapboxOptions.style - The style spec to use, or an url to the style spec
- * @returns {{addGeoJsonSource: Function, addLayer: Function, mapboxMap: shallowRef, addImage: Function, openPopup: Function, on: Function, off: Function}}
+ * @returns {{addGeoJsonSource: Function, addLayer: Function, mapboxMap: shallowRef, addImage: Function, openPopup: Function, on: Function, off: Function}} -
  */
 export function useMapbox(mapboxOptions) {
     const map = shallowRef(null)
@@ -80,7 +80,7 @@ export function useMapbox(mapboxOptions) {
      *
      * @param {string} id - The ID of the image
      * @param {string|ref} imageUrl - The URL of the image to add
-     * @param {object} options - See https://docs.mapbox.com/mapbox-gl-js/api/map/#addimage-parameters
+     * @param {object} options - See {@link https://docs.mapbox.com/mapbox-gl-js/api/map/#addimage-parameters}
      */
     function addImage(id, imageUrl, options) {
         const stop = watchEffect(async () => {

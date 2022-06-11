@@ -5,6 +5,7 @@
       :stations="stations"
       :selected-station="selectedStation"
       :show-bikes="showBikes"
+      :bounds="bounds"
     />
     <button
       class="lower-left-button button is-light"
@@ -49,31 +50,10 @@
       />
     </transition>
   </div>
-  <div
-    class="tag is-warning status"
-    v-if="status === 'loading'"
-  >
-    <span class="icon">
-      <FontAwesomeIcon
-        icon="spinner"
-        class="fa-spin"
-      />
-    </span>
-    <span>Loading</span>
-  </div>
-  <div
-    class="tag is-danger status"
-    v-if="status === 'error'"
-  >
-    <span class="icon"><FontAwesomeIcon icon="circle-xmark" /></span>
-    <span>Error</span>
-  </div>
-  <div
-    class="tag is-success status"
-    v-if="status === 'ok'"
-  >
-    <span class="icon"><FontAwesomeIcon icon="circle-check" /></span>
-  </div>
+  <StatusIndicator
+    class="status-indicator"
+    :status="status"
+  />
 </template>
 
 <script setup>
@@ -83,6 +63,8 @@ import StationSearch from "./components/StationSearch"
 import Gbfs from './gbfs'
 import sources from './gbfs-sources.json'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import StatusIndicator from "@/components/StatusIndicator";
+
 
 const systemInfo = ref(null)
 const stationInfo = ref(null)
@@ -100,16 +82,18 @@ const stations = computed(() => {
   }, {}) ?? {}
   return stationInfo.value?.data?.stations.map(info => ({...info, ...statusById[info.station_id]}))
 })
-
-const source = new URLSearchParams(window.location.search).get('source') ?? 'oslo'
-const gbfs = new Gbfs(sources[source])
+const source = sources[new URLSearchParams(window.location.search).get('source') ?? 'oslo']
+const gbfs = new Gbfs(source?.url)
+const bounds = ref(source?.bounds)
 
 gbfs.getSystemInfo()
     .then(res => systemInfo.value = res)
     .catch(handleError)
+
 gbfs.getStationInfo()
     .then(res => stationInfo.value = res)
     .catch(handleError)
+
 pollStationStatus()
     .catch(handleError)
 
@@ -174,7 +158,7 @@ function handleError(error) {
   margin: 8px 8px 36px 8px;
 }
 
-.status {
+.status-indicator {
   position: absolute;
   top: 0;
   left: 0;

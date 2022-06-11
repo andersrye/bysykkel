@@ -4,7 +4,6 @@
 
 <script setup>
 import { computed, reactive, watch, ref, watchEffect } from "vue"
-import mapboxgl from "mapbox-gl"
 import StationPopupContent from '@/components/StationPopupContent'
 import "mapbox-gl/dist/mapbox-gl.css"
 import { useMapbox } from "@/composables/mapbox"
@@ -22,15 +21,18 @@ const geoJson = computed(() => stationsAsFeatureCollection(props.stations))
 const props = defineProps({
   stations: { type: Array, default: () => ([]) },
   selectedStation: { type: Object, default: null },
-  showBikes: {type: Boolean, default: true}
+  showBikes: {type: Boolean, default: true},
+  bounds: {type: Array, default: () => ([0,0,0,0])}
 })
 
 const map = useMapbox({
   container: mapContainer,
   accessToken: 'pk.eyJ1IjoiYW5kZXJzcnllIiwiYSI6ImNsMHI1emE5aDAwNGMzaW5tOHZrdmt0azcifQ.VCTJiGvc-mef33wXhlqk7g', //public key
   style: "mapbox://styles/mapbox/streets-v11",
-  zoom: 5,
-  center: [10.735834, 60.917947]
+  bounds: props.bounds,
+  fitBoundsOptions: {
+    padding: 50
+  }
 })
 
 map.addImage('circle-icon', circleIcon, {sdf: true})
@@ -75,22 +77,6 @@ watch(() => props.selectedStation, station => {
       zoom: 16
     })
     openPopup(station, lngLat)
-  }
-})
-
-//fit map to geoJson once, then remove watch
-const unwatch = watchEffect(() => {
-  if (map.mapboxMap.value && geoJson.value?.features?.length) {
-    const coordinates = geoJson.value.features.map(f => f.geometry.coordinates)
-    const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
-    for (const coordinate of coordinates) {
-      bounds.extend(coordinate)
-    }
-    map.mapboxMap.value?.fitBounds(bounds, {
-      padding: { top: 50, bottom: 50, left: 50, right: 50 },
-      duration: 1000,
-    })
-    unwatch()
   }
 })
 
