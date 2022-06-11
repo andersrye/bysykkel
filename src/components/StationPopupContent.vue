@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import '../assets/app.scss'
 import {inject} from "vue";
 import StationInfo from "@/components/StationInfo";
 

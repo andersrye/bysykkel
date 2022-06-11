@@ -1,7 +1,6 @@
 # bysykkel
 
-Simple app written in Vue 3 composition API, using Oslo Bysykkel's open API  
-to show available bikes and docks in a map and a list. 
+Simple app written in Vue 3 composition API, using Oslo Bysykkel's open API to show available bikes and docks in a map and a list. 
 
 See the changelog [here](CHANGELOG.md)
 

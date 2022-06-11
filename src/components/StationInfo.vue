@@ -22,7 +22,6 @@ defineProps({
 </script>
 
 <style scoped>
-
 .station-title {
   font-size: 16px;
 }
