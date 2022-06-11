@@ -2,6 +2,7 @@ import {onMounted, onUnmounted, unref, watchEffect, shallowRef, ref, createApp, 
 import mapboxgl from "mapbox-gl";
 
 /**
+ * Helper composable to make working with mapbox maps easier.
  *
  * @param {object} mapboxOptions - See https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters for all available options
  * @param {string|HTMLElement|ref} mapboxOptions.container - The html element or element ID in which to render the map
@@ -16,7 +17,7 @@ export function useMapbox(mapboxOptions) {
     onMounted(() => {
         mapboxOptions.container = unref(mapboxOptions.container)
         const newMap = new mapboxgl.Map(mapboxOptions)
-        newMap.on('load', () => {
+        newMap.once('load', () => {
             map.value = newMap
         })
     })
@@ -45,8 +46,7 @@ export function useMapbox(mapboxOptions) {
                     map.value.addSource('stations', {
                             type: 'geojson',
                             data: unrefedGeoJson
-                        }
-                    )
+                        })
                 }
             }
         })
@@ -55,7 +55,7 @@ export function useMapbox(mapboxOptions) {
 
     /**
      * Add a layer to the map, replacing it if already exists.
-     * If `layer` is reactive it will update on change
+     * If `layer` is reactive it will update automatically
      *
      * @param {object|ref} layer - The layer to add
      */
@@ -105,7 +105,19 @@ export function useMapbox(mapboxOptions) {
 
     const popup = new mapboxgl.Popup({offset: 14})
 
+    /**
+     * Add a popup to the map at the given location.
+     * Mounts the component as the popup contents and provides it the given injects
+     *
+     * @param {object} component - The component to mount inside the popup
+     * @param {number[]} lngLat - the position of the popup
+     * @param {object} injects - values to provide to the component
+     */
     function openPopup(component, lngLat, injects = {}) {
+        // in order to show a vue component in the map it has to be created as a new
+        // app and mounted inside the mapbox popup. (reactive) values can be passed to
+        // the new app through provide/inject
+        // todo: support showing multiple popups at a time
         const popupContent = createApp(component)
         for (const [key, value] of Object.entries(injects)) {
             popupContent.provide(key, value)
@@ -135,6 +147,7 @@ export function useMapbox(mapboxOptions) {
     function on(type, layerId, listener) {
         runOnceWhenMapReady(map => map.on(type, layerId, listener))
     }
+
     function off(type, layerId, listener) {
         runOnceWhenMapReady(map => map.off(type, layerId, listener))
     }
