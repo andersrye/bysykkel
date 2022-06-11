@@ -27,7 +27,7 @@ const props = defineProps({
 
 const map = useMapbox({
   container: mapContainer,
-  accessToken: 'pk.eyJ1IjoiYW5kZXJzcnllIiwiYSI6ImNsMHI1emE5aDAwNGMzaW5tOHZrdmt0azcifQ.VCTJiGvc-mef33wXhlqk7g',
+  accessToken: 'pk.eyJ1IjoiYW5kZXJzcnllIiwiYSI6ImNsMHI1emE5aDAwNGMzaW5tOHZrdmt0azcifQ.VCTJiGvc-mef33wXhlqk7g', //public key
   style: "mapbox://styles/mapbox/streets-v11",
   zoom: 5,
   center: [10.735834, 60.917947]
