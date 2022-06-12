@@ -18,6 +18,6 @@ export function stationAsFeature(station) {
 export function stationsAsFeatureCollection(stations) {
     return {
         type: 'FeatureCollection',
-        features: stations?.map(info => stationAsFeature(info)) ?? []
+        features: stations?.map(station => stationAsFeature(station)) ?? []
     }
 }

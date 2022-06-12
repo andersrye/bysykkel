@@ -3,7 +3,7 @@
     <div
       v-for="station in stationList"
       :key="station.station_id"
-      class="card item-container"
+      class="box item-container"
       @click="$emit('station-click', station)"
     >
       <StationInfo

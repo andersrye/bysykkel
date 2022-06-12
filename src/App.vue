@@ -65,7 +65,6 @@ import sources from './gbfs-sources.json'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import StatusIndicator from "@/components/StatusIndicator";
 
-
 const systemInfo = ref(null)
 const stationInfo = ref(null)
 const stationStatus = ref(null)
@@ -73,6 +72,10 @@ const selectedStation = ref(null)
 const showBikes = ref(true)
 const showSearch = ref(false)
 const status = ref("loading")
+const sourceName = new URLSearchParams(window.location.search).get('source') ?? 'oslo'
+const source = sources[sourceName]
+const gbfs = new Gbfs(source?.url, {clientId: 'andersrye-bysykkeltest'})
+const bounds = ref(source?.bounds)
 
 const stations = computed(() => {
   //merge the station info and status to make it easier to handle
@@ -82,9 +85,6 @@ const stations = computed(() => {
   }, {}) ?? {}
   return stationInfo.value?.data?.stations.map(info => ({...info, ...statusById[info.station_id]}))
 })
-const source = sources[new URLSearchParams(window.location.search).get('source') ?? 'oslo']
-const gbfs = new Gbfs(source?.url)
-const bounds = ref(source?.bounds)
 
 gbfs.getSystemInfo()
     .then(res => systemInfo.value = res)
@@ -138,8 +138,8 @@ function handleError(error) {
   right: 0;
   bottom: 0;
   margin: 8px 8px 32px 8px;
-  height: calc(100vh - 40px);
-  width: calc(100vw - 32px);
+  height: calc(100% - 40px);
+  width: calc(100% - 32px);
   max-width: 500px;
   overflow: auto;
 }
