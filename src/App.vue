@@ -40,6 +40,10 @@
         <span>Søk</span>
       </button>
     </transition>
+    <StatusIndicator
+      class="status-indicator"
+      :status="status"
+    />
     <transition name="fade">
       <StationSearch
         v-if="showSearch"
@@ -50,10 +54,6 @@
       />
     </transition>
   </div>
-  <StatusIndicator
-    class="status-indicator"
-    :status="status"
-  />
 </template>
 
 <script setup>
