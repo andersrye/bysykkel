@@ -15,7 +15,7 @@
 
 <script setup>
 import {computed} from "vue";
-import StationInfo from "@/components/StationInfo";
+import StationInfo from "@/components/StationInfo.vue";
 
 const props = defineProps({
   stations: {type: Array, default: () => ([])},

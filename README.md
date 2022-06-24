@@ -6,11 +6,8 @@ See the changelog [here](CHANGELOG.md)
 
 Run with
 ```
-npm install
-npm run serve
+npm install 
+npm run dev
 ```
-and open http://localhost:8080
 
-or
-
-check the demo [here](https://pndapetz.im/bysykkel/) (also available for [Bergen](https://pndapetz.im/bysykkel/?source=bergen) and [Trondheim](https://pndapetz.im/bysykkel/?source=trondheim))
+or check the demo [here](https://pndapetz.im/bysykkel/) (also available for [Bergen](https://pndapetz.im/bysykkel/?source=bergen) and [Trondheim](https://pndapetz.im/bysykkel/?source=trondheim))

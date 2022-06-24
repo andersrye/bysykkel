@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="tag is-warning"
       v-if="status === 'loading'"
+      class="tag is-warning"
     >
       <span class="icon">
         <FontAwesomeIcon
@@ -13,8 +13,8 @@
       <span>Loading</span>
     </div>
     <div
-      class="tag is-danger"
       v-if="status === 'error'"
+      class="tag is-danger"
     >
       <span class="icon">
         <FontAwesomeIcon icon="circle-xmark" />
@@ -22,8 +22,8 @@
       <span>Error</span>
     </div>
     <div
-      class="tag is-success"
       v-if="status === 'ok'"
+      class="tag is-success"
     >
       <span class="icon">
         <FontAwesomeIcon icon="circle-check" />
@@ -33,12 +33,10 @@
 </template>
 
 <script setup>
-import {watch} from "vue";
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-const props = defineProps({
+defineProps({
   status: {type: String, default: ''}
 })
-watch(()=>props.status, s=>console.log('status', s))
 </script>
 

@@ -8,8 +8,8 @@
       :bounds="bounds"
     />
     <button
-      class="lower-left-button button is-light"
       v-if="showBikes"
+      class="lower-left-button button is-light"
       @click="showBikes = false"
     >
       <span class="icon">
@@ -18,8 +18,8 @@
       <span>Vis ledige plasser</span>
     </button>
     <button
-      class="lower-left-button button is-link"
       v-if="!showBikes"
+      class="lower-left-button button is-link"
       @click="showBikes = true"
     >
       <span class="icon">
@@ -30,8 +30,8 @@
 
     <transition name="fade">
       <button
-        class="lower-right-button button is-link"
         v-if="!showSearch"
+        class="lower-right-button button is-link"
         @click="showSearch = true"
       >
         <span class="icon">
@@ -58,12 +58,12 @@
 
 <script setup>
 import {ref, computed, watchEffect} from "vue"
-import StationMap from "./components/StationMap"
-import StationSearch from "./components/StationSearch"
-import Gbfs from './gbfs'
-import sources from './gbfs-sources.json'
+import StationMap from "@/components/StationMap.vue"
+import StationSearch from "@/components/StationSearch.vue"
+import Gbfs from '@/gbfs'
+import sources from '@/gbfs-sources.json'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import StatusIndicator from "@/components/StatusIndicator";
+import StatusIndicator from "@/components/StatusIndicator.vue";
 
 const systemInfo = ref(null)
 const stationInfo = ref(null)

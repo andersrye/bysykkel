@@ -4,7 +4,7 @@
 
 <script setup>
 import { computed, reactive, watch, ref, watchEffect } from "vue"
-import StationPopupContent from '@/components/StationPopupContent'
+import StationPopupContent from '@/components/StationPopupContent.vue'
 import "mapbox-gl/dist/mapbox-gl.css"
 import { useMapbox } from "@/composables/mapbox"
 import { stationsAsFeatureCollection } from '@/utils/geojson'

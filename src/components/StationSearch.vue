@@ -3,9 +3,9 @@
     <div class="field is-grouped">
       <p class="control is-expanded">
         <input
+          ref="searchInput"
           class="input is-normal search-field"
           type="text"
-          ref="searchInput"
           placeholder="Søk"
           :value="filterText"
           @input="e => filterText = e.target.value"
@@ -33,8 +33,8 @@
 </template>
 
 <script setup>
-import StationList from './StationList.vue'
 import {onMounted, ref} from 'vue'
+import StationList from '@/components/StationList.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const filterText = ref("")
