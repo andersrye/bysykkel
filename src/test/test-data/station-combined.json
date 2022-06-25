@@ -1,0 +1,18 @@
+{
+  "station_id": "408",
+  "name": "Tøyen skole",
+  "address": "Ringgata 2A",
+  "rental_uris": {
+    "android": "oslobysykkel://stations/408",
+    "ios": "oslobysykkel://stations/408"
+  },
+  "lat": 59.914943,
+  "lon": 10.773977,
+  "capacity": 15,
+  "is_installed": 1,
+  "is_renting": 1,
+  "is_returning": 1,
+  "last_reported": 1656104014,
+  "num_bikes_available": 2,
+  "num_docks_available": 13
+}

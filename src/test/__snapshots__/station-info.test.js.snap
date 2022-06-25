@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`mount component 1`] = `
+"<div data-v-45f68d02=\\"\\">
+  <div class=\\"station-title\\" data-test=\\"title\\" data-v-45f68d02=\\"\\">Tøyen skole</div>
+  <div class=\\"station-info\\" data-test=\\"address\\" data-v-45f68d02=\\"\\">Ringgata 2A</div>
+  <div class=\\"station-info\\" data-v-45f68d02=\\"\\"><span class=\\"station-count\\" data-v-45f68d02=\\"\\"><!----><span class=\\"station-count-number\\" data-test=\\"bikes-available\\" data-v-45f68d02=\\"\\">2</span></span><span class=\\"station-count\\" data-v-45f68d02=\\"\\"><!----><span class=\\"station-count-number\\" data-test=\\"docks-available\\" data-v-45f68d02=\\"\\">13</span></span></div>
+</div>"
+`;

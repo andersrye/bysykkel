@@ -2,6 +2,7 @@
   <div id="app">
     <StationMap
       class="bicycle-map"
+      data-test="map"
       :stations="stations"
       :selected-station="selectedStation"
       :show-bikes="showBikes"
@@ -10,6 +11,7 @@
     <button
       v-if="showBikes"
       class="lower-left-button button is-light"
+      data-test="docks-button"
       @click="showBikes = false"
     >
       <span class="icon">
@@ -20,6 +22,7 @@
     <button
       v-if="!showBikes"
       class="lower-left-button button is-link"
+      data-test="bikes-button"
       @click="showBikes = true"
     >
       <span class="icon">
@@ -27,11 +30,16 @@
       </span>
       <span>Vis ledige sykler</span>
     </button>
-
+    <StatusIndicator
+      class="status-indicator"
+      data-test="status-indicator"
+      :status="status"
+    />
     <transition name="fade">
       <button
         v-if="!showSearch"
         class="lower-right-button button is-link"
+        data-test="search-button"
         @click="showSearch = true"
       >
         <span class="icon">
@@ -40,15 +48,12 @@
         <span>Søk</span>
       </button>
     </transition>
-    <StatusIndicator
-      class="status-indicator"
-      :status="status"
-    />
     <transition name="fade">
       <StationSearch
         v-if="showSearch"
         class="station-search"
         :stations="stations"
+        data-test="search-view"
         @close="showSearch = false"
         @selected-station="stationSelected"
       />
@@ -57,7 +62,7 @@
 </template>
 
 <script setup>
-import {ref, computed, watchEffect} from "vue"
+import {ref, computed, watchEffect, shallowRef} from "vue"
 import StationMap from "@/components/StationMap.vue"
 import StationSearch from "@/components/StationSearch.vue"
 import Gbfs from '@/gbfs'
@@ -65,17 +70,17 @@ import sources from '@/gbfs-sources.json'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import StatusIndicator from "@/components/StatusIndicator.vue";
 
-const systemInfo = ref(null)
-const stationInfo = ref(null)
-const stationStatus = ref(null)
-const selectedStation = ref(null)
+const systemInfo = shallowRef(null)
+const stationInfo = shallowRef(null)
+const stationStatus = shallowRef(null)
+const selectedStation = shallowRef(null)
 const showBikes = ref(true)
 const showSearch = ref(false)
 const status = ref("loading")
 const sourceName = new URLSearchParams(window.location.search).get('source') ?? 'oslo'
 const source = sources[sourceName]
 const gbfs = new Gbfs(source?.url, {clientId: 'andersrye-bysykkeltest'})
-const bounds = ref(source?.bounds)
+const bounds = source?.bounds
 
 const stations = computed(() => {
   //merge the station info and status to make it easier to handle

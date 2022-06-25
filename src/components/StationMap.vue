@@ -16,7 +16,6 @@ import stationLayer from '@/map-layers/stations.json'
 const mapContainer = ref(null)
 const reactiveAvailableBikesLayer = reactive(availableBikesLayer)
 const reactiveAvailableDocksLayer = reactive(availableDocksLayer)
-const geoJson = computed(() => stationsAsFeatureCollection(props.stations))
 
 const props = defineProps({
   stations: { type: Array, default: () => ([]) },
@@ -24,6 +23,8 @@ const props = defineProps({
   showBikes: {type: Boolean, default: true},
   bounds: {type: Array, default: () => ([0,0,0,0])}
 })
+
+const geoJson = computed(() => stationsAsFeatureCollection(props.stations))
 
 const map = useMapbox({
   container: mapContainer,
