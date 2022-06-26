@@ -3,6 +3,9 @@
 ## [0.3.0] - 2022-06-26 
 - Migrated from vue-cli to vite
 - Added some tests
+- Added favicon
+- Center popup on feature rather than event location when clicking in the map
+- Added simple web manifest
 
 ## [0.2.0] - 2022-06-11
 - Migrated from Vue 2 to Vue 3 with composition API
