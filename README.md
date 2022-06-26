@@ -9,5 +9,10 @@ Run with
 npm install 
 npm run dev
 ```
+Run tests with
+```
+npm run test
+```
+
 
 or check the demo [here](https://pndapetz.im/bysykkel/) (also available for [Bergen](https://pndapetz.im/bysykkel/?source=bergen) and [Trondheim](https://pndapetz.im/bysykkel/?source=trondheim))
