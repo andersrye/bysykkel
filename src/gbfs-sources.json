@@ -1,14 +1,14 @@
 {
   "oslo": {
     "url": "https://gbfs.urbansharing.com/oslobysykkel.no/gbfs.json",
-    "bounds": [[10.81431433498766,59.9534114],[10.651118,59.90321254732584]]
+    "bounds": [[10.814314,59.953411],[10.651118,59.903212]]
   },
   "trondheim": {
     "url": "https://gbfs.urbansharing.com/trondheimbysykkel.no/gbfs.json",
-    "bounds": [[10.45927620210125, 63.446059058709096],[10.357520394276179,63.39840743943492]]
+    "bounds": [[10.459276, 63.446059],[10.357520,63.398407]]
   },
   "bergen": {
     "url": "https://gbfs.urbansharing.com/bergenbysykkel.no/gbfs.json",
-    "bounds": [[5.361202283994771,60.423343433292786],[5.286516470683409,60.367425453190464]]
+    "bounds": [[5.361202,60.423343],[5.286516,60.367425]]
   }
 }
