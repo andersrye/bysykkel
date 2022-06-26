@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`StationList > mount component 1`] = `
+"<div data-v-e8df3e1c=\\"\\">
+  <div class=\\"box item-container\\" data-v-e8df3e1c=\\"\\">
+    <station-info-stub station=\\"[object Object]\\" data-v-e8df3e1c=\\"\\"></station-info-stub>
+  </div>
+  <div class=\\"box item-container\\" data-v-e8df3e1c=\\"\\">
+    <station-info-stub station=\\"[object Object]\\" data-v-e8df3e1c=\\"\\"></station-info-stub>
+  </div>
+  <div class=\\"box item-container\\" data-v-e8df3e1c=\\"\\">
+    <station-info-stub station=\\"[object Object]\\" data-v-e8df3e1c=\\"\\"></station-info-stub>
+  </div>
+</div>"
+`;

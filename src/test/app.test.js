@@ -16,7 +16,7 @@ vi.mock("@/gbfs", () => {
     return { default: Gbfs }
 })
 
-describe('app', () => {
+describe('App', () => {
     let gbfs
 
     beforeEach(() => {
@@ -72,7 +72,6 @@ describe('app', () => {
         await wrapper.get('[data-test=search-button]').trigger('click')
 
         expect(wrapper.find('[data-test=search-view]').exists()).toBe(true)
-
     })
 
     //todo: test computed combined station info

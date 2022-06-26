@@ -1,0 +1,56 @@
+[
+  {
+    "station_id": "408",
+    "name": "Tøyen skole",
+    "address": "Ringgata 2A",
+    "rental_uris": {
+      "android": "oslobysykkel://stations/408",
+      "ios": "oslobysykkel://stations/408"
+    },
+    "lat": 59.914943,
+    "lon": 10.773977,
+    "capacity": 15,
+    "is_installed": 1,
+    "is_renting": 1,
+    "is_returning": 1,
+    "last_reported": 1656250150,
+    "num_bikes_available": 2,
+    "num_docks_available": 13
+  },
+  {
+    "station_id": "523",
+    "name": "Tøyenbekken",
+    "address": "Tøyenbekken",
+    "rental_uris": {
+      "android": "oslobysykkel://stations/523",
+      "ios": "oslobysykkel://stations/523"
+    },
+    "lat": 59.9115945,
+    "lon": 10.7617736,
+    "capacity": 30,
+    "is_installed": 1,
+    "is_renting": 1,
+    "is_returning": 1,
+    "last_reported": 1656250150,
+    "num_bikes_available": 16,
+    "num_docks_available": 14
+  },
+  {
+    "station_id": "377",
+    "name": "Tøyenparken",
+    "address": "Tøyenparken",
+    "rental_uris": {
+      "android": "oslobysykkel://stations/377",
+      "ios": "oslobysykkel://stations/377"
+    },
+    "lat": 59.915667,
+    "lon": 10.7775665,
+    "capacity": 29,
+    "is_installed": 1,
+    "is_renting": 1,
+    "is_returning": 1,
+    "last_reported": 1656250150,
+    "num_bikes_available": 0,
+    "num_docks_available": 28
+  }
+]

@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import StationMap from '@/components/StationMap.vue'
 import { expect, test, vi } from 'vitest'
 import mapboxgl from "mapbox-gl";
-import station from './test-data/station-combined.json'
+import station from './test-data/stations-combined.json'
 
 //mapbox can't really work in jsdom, so we have to mock it
 vi.mock("mapbox-gl", () => {
@@ -14,6 +14,7 @@ vi.mock("mapbox-gl", () => {
         on: vi.fn(),
         off: vi.fn(),
         loadImage: vi.fn(),
+        addImage: vi.fn(),
         getSource: vi.fn(),
         addSource: vi.fn(),
         getLayer: vi.fn(),
@@ -36,7 +37,7 @@ vi.mock("mapbox-gl", () => {
     }
 })
 
-describe('app', () => {
+describe('StationMap', () => {
 
     afterEach(() => {
         vi.clearAllMocks()
@@ -59,6 +60,6 @@ describe('app', () => {
         expect(popupInstance.setLngLat).toHaveBeenCalledWith(lngLat)
         expect(popupInstance.addTo).toHaveBeenCalled()
 
-        //todo: check that PopupContent has been mounted properly?
+        //todo: check that StationPopupContent has been mounted properly?
     })
 })
