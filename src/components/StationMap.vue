@@ -55,7 +55,7 @@ map.on('mouseleave', [availableBikesLayer.id, availableDocksLayer.id], () => {
 map.on('click', [availableBikesLayer.id, availableDocksLayer.id], (e) => {
   const feature = e.features[0]
   if(feature) {
-    openPopup(feature.properties, e.lngLat)
+    openPopup(feature.properties, feature.geometry.coordinates)
   }
 })
 
