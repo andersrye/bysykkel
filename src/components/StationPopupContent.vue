@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import {inject} from "vue"
+import { inject } from "vue"
 import StationInfo from "@/components/StationInfo.vue"
 
 const station = inject("station")

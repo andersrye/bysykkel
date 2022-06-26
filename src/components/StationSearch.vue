@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import StationList from '@/components/StationList.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 

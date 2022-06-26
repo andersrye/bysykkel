@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <StationMap
       class="bicycle-map"
       data-test="map"
@@ -144,8 +144,8 @@ function handleError(error) {
   bottom: 0;
   margin: 8px 8px 32px 8px;
   height: calc(100% - 40px);
-  width: calc(100% - 32px);
-  max-width: 500px;
+  width: calc(100% - 16px);
+  max-width: 450px;
   overflow: auto;
 }
 
